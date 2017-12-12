@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="build" name="TimeSeriesLoader">
+
+	<property name="projectName" value="TimeSeriesLoader" />
+    <property name="lib.dir" value="lib"/>
+    <property name="src.dir" value="src"/>
+    <property name="build.dir" value="bin"/>
+	<property name="dist.dir" value="dist"/>
+	
+	 <path id="lib.classpath">
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement location="${build.dir}"/>
+    </path>
+	
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+	
+	<target depends="clean" name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+	
+	
+	 <target depends="init" name="build">
+        <mkdir dir="${build.dir}"/>
+        <javac classpathref="lib.classpath" destdir="${build.dir}" debug="true">
+            <src path="${src.dir}"/>
+        </javac>
+    </target>
+
+	
+	<target name="run" depends="build">
+        <!-- <copy file="logging.properties" todir="${build.dir}"/>
+		<copy file="connection.properties" todir="${build.dir}"/> -->
+        <java classpathref="lib.classpath" classname="com.ibm.diamonmdoffshore.edgeservice.TimeSeriesLoader" fork="true">
+         </java>
+    </target>
+	
+	<target name="dist" depends="build" description="package, output to JAR">
+     <mkdir dir="${dist.dir}" />
+	 <!-- <mkdir dir="${dist.dir}/lib" />
+ 	     <copy includeemptydirs="false" todir="${dist.dir}/lib">
+            <fileset dir="lib">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy> -->
+		<jar jarfile="${dist.dir}/${projectName}.jar" basedir="${build.dir}" >
+		
+        <manifest>
+                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+                <attribute name="Rsrc-Main-Class" value="com.ibm.diamonmdoffshore.edgeservice.TimeSeriesLoader"/>
+                <attribute name="Class-Path" value="."/>
+                <attribute name="Rsrc-Class-Path" value="./ com.ibm.mq.commonservices.jar com.ibm.mq.jar com.ibm.mq.headers.jar com.ibm.mq.defaultconfig.jar ifxjdbc.jar ifxjdbcx.jar json-simple-1.1.1.jar com.ibm.mq.allclient.jar"/>
+            </manifest>
+            <zipfileset src="jar-in-jar-loader.zip"/>
+            <fileset dir="C:/Projects/DiamondOffshore/artifacts/Edge/TimeSeriesLoader/EdgeServices/bin"/>
+            <zipfileset dir="C:/Projects/DiamondOffshore/artifacts/Edge/TimeSeriesLoader/EdgeServices/lib" includes="com.ibm.mq.commonservices.jar"/>
+            <zipfileset dir="C:/Projects/DiamondOffshore/artifacts/Edge/TimeSeriesLoader/EdgeServices/lib" includes="com.ibm.mq.jar"/>
+            <zipfileset dir="C:/Projects/DiamondOffshore/artifacts/Edge/TimeSeriesLoader/EdgeServices/lib" includes="com.ibm.mq.headers.jar"/>
+            <zipfileset dir="C:/Projects/DiamondOffshore/artifacts/Edge/TimeSeriesLoader/EdgeServices/lib" includes="com.ibm.mq.defaultconfig.jar"/>
+            <zipfileset dir="C:/Projects/DiamondOffshore/artifacts/Edge/TimeSeriesLoader/EdgeServices/lib" includes="ifxjdbc.jar"/>
+            <zipfileset dir="C:/Projects/DiamondOffshore/artifacts/Edge/TimeSeriesLoader/EdgeServices/lib" includes="ifxjdbcx.jar"/>
+            <zipfileset dir="C:/Projects/DiamondOffshore/artifacts/Edge/TimeSeriesLoader/EdgeServices/lib" includes="json-simple-1.1.1.jar"/>
+            <zipfileset dir="C:/Projects/DiamondOffshore/artifacts/Edge/TimeSeriesLoader/EdgeServices/lib" includes="com.ibm.mq.allclient.jar"/>
+    </jar>
+</target>
+	
+	 <target name="TimeSeriesLoader">
+        <java classname="com.ibm.diamonmdoffshore.edgeservice.TimeSeriesLoader" failonerror="true" fork="yes">
+            <classpath refid="EdgeServices.classpath"/>
+        </java>
+    </target>
+	
+<!--     <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../../../../eclipse/eclipse-jee-neon-2-win32/eclipse/"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.7"/>
+    <property name="source" value="1.7"/>
+    <path id="EdgeServices.classpath">
+        <pathelement location="bin"/>
+        <pathelement location="lib/com.ibm.mq.commonservices.jar"/>
+        <pathelement location="lib/com.ibm.mq.defaultconfig.jar"/>
+        <pathelement location="lib/com.ibm.mq.headers.jar"/>
+        <pathelement location="lib/com.ibm.mq.jar"/>
+        <pathelement location="lib/ifxjdbc.jar"/>
+        <pathelement location="lib/ifxjdbcx.jar"/>
+        <pathelement location="lib/json-simple-1.1.1.jar"/>
+        <pathelement location="lib/com.ibm.mq.allclient.jar"/>
+    </path> -->
+	
+<!--     <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="EdgeServices.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target> -->
+    <!-- <target name="TimeSeriesLoader">
+        <java classname="com.ibm.diamonmdoffshore.edgeservice.TimeSeriesLoader" failonerror="true" fork="yes">
+            <classpath refid="EdgeServices.classpath"/>
+        </java>
+    </target> -->
+</project>
